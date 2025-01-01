@@ -1,17 +1,103 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    Dashboard
+{% block extra_css %}
+<style>
+    .card-img {
+        object-fit: cover; /* Ensures the image covers the card area */
+        height: 100%;     /* Makes the image fill the card */
+        width: 100%;      /* Stretches image to card width */
+    }
+
+    .app-content-header{
+        display: none;
+    }
+
+    .app-content {
+        padding: 0px !important
+    }
+
+    .container-fluid:has(#banner_bg) {
+        padding: 0px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <div class="content-header">
-        <div class="container-fluid">
-            <h1>Dashboard</h1>
-        </div>
+<div id="banner_bg" style="position: relative; width: 100%; height: 400px; background-size: cover; background-image: url('https://www.horticulture.red/wp-content/uploads/2023/09/red-horticulture-spectrum-and-colors-of-light.jpg'); background-position: center; background-repeat: no-repeat;">
+    <!-- Overlay -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 1;"></div>
+    
+    <!-- Text Content -->
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; z-index: 2; text-align: center;">
+        <h1 style="font-size: 3rem; font-weight: bold; text-transform: uppercase; margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+            Selamat Datang
+        </h1>
+        <p style="font-size: 1.25rem; margin: 0; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);">
+            Website pembaca spectrum warna sederhana.
+        </p>
+        <button type="button" class="btn btn-outline-light mt-2">Lihat Materi</button>
     </div>
+</div>
 
-    <div class="content-main">
+<div id="about_bg" class="p-5">
+    <div align="center">
+        <h1 class="mb-3" style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem;">
+            Tentang Website
+        </h1>
+        <hr style="height: 10px; width: 300px; border: none; background-color: #000000; margin: 0;">
+        <h5 class="mt-5" style="text-align: justify;">
+            Website ini dirancang untuk membaca spektrum warna dari cahaya tampak menggunakan file gambar yang diunggah oleh pengguna. Website ini memiliki fitur untuk pengguna dapat mengunggah gambar dan menyimpannya di database, kemudian sistem akan menganalisis spektrum warna yang terkandung dalam gambar tersebut. Dengan antarmuka yang intuitif dan mudah digunakan, website ini cocok untuk siapa saja yang ingin mempelajari distribusi warna dalam gambar secara visual dengan konsep sederhana. Proyek ini dibuat sebagai pembelajaran awal untuk menggabungkan teknologi spektrum warna dalam konteks yang sederhana namun bermanfaat.
+        </h5>
+    </div>
+</div>
+
+<div id="fitur_bg" class="mt-5 p-5" style="background-color: #89909a;">
+    <div style="color: white;">
+        <h1 class="mb-1" style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem;">
+            Fitur Website
+        </h1>
+        <h5 class="mb-3">
+            adapun fitur dari website tersebut yaitu sebagai berikut
+        </h5>
+
+        <div class="">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card mb-3">
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <h5 class="card-title mb-2">Upload Gambar</h5>
+                            <p class="card-text">Anda dapat mengungah gambar anda untuk di disimpan dalam basis data.</p>
+                        </div>
+                    </div>
+            
+                    <div class="card mb-3">
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <h5 class="card-title mb-2">Pengecekan Gelombang Warna</h5>
+                            <p class="card-text">Anda dapat mengecek gelombang warna dari gambar yang sudah di upload.</p>
+                        </div>
+                    </div>
+            
+                    <div class="card mb-3">
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <h5 class="card-title mb-2">Materi Gelombang Warna</h5>
+                            <p class="card-text">Disini anda dapat melihat materi dari gelombang warna dengan ringkas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 d-flex align-items-stretch">
+                    <div id="banner_bg" style="border-radius: 20px; position: relative; width: 100%; height: 290px; background-size: cover; background-image: url('https://img.freepik.com/free-vector/online-image-upload-landing-page_23-2148282428.jpg'); background-position: center; background-repeat: no-repeat;">
+                </div>
+            </div>
+        </div>
         
     </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+
+</script>
 {% endblock %}
