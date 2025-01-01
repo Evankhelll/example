@@ -9,4 +9,3 @@ class gambarViewSet(viewsets.ModelViewSet):
 
     queryset = models.gambar.objects.all()
     serializer_class = serializers.gambarSerializer
-    permission_classes = [permissions.IsAuthenticated]
