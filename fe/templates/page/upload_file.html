@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    .card-img {
+        object-fit: cover; /* Ensures the image covers the card area */
+        height: 100%;     /* Makes the image fill the card */
+        width: 100%;      /* Stretches image to card width */
+    }
+</style>
+{% endblock %}
+
+{% block page_title %}
+    Upload Image
+{% endblock %}
+
+{% block content %}
+    
+
+    <div class="content-main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <img id="preview-img" src="https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg" alt="img" class="card-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <form enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="nama_gambar" class="form-label">Nama Gambar</label>
+                                        <input type="text" class="form-control" id="nama_gambar" name="nama_gambar" maxlength="100" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" maxlength="100" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="gambar" class="form-label">Upload Gambar</label>
+                                        <input type="file" class="form-control" id="gambar" name="gambar" required>
+                                    </div>
+                                    <div align="right">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        $('#gambar').on('change', function (event) {
+            const [file] = event.target.files;
+            console.log(event.target.files);
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview-img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        $('form').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get form values
+            const namaGambar = $('#nama_gambar').val().trim();
+            const keterangan = $('#keterangan').val().trim();
+            const gambar = $('#gambar').val();
+
+            // Validate fields
+            if (gambar === "") {
+                alert("Please upload a gambar.");
+                return;
+            }
+
+            const formData = new FormData(this);
+
+            $.ajax({
+                url: '/core/api/v1/gambar/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert("Form submitted successfully!");
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred: " + error);
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        // Reset button functionality
+        $('.btn-danger').on('click', function() {
+            $('form')[0].reset();
+        });
+    });
+</script>
+{% endblock %}

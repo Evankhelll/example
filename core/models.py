@@ -4,8 +4,8 @@ from django.db import models
 class gambar(models.Model):
 
     # Fields
+    nama_gambar = models.TextField(max_length=100)
+    keterangan = models.TextField(max_length=100, blank=True, null=True)
     gambar = models.FileField(upload_to="upload/files/")
     created = models.DateTimeField(auto_now_add=True, editable=False)
-    nama_gambar = models.TextField(max_length=100)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
-    keterangan = models.TextField(max_length=100)

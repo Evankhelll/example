@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.conf import settings
 import os
 import math
+from .models import gambar
 
 # Predefined set of web color names with their RGB values
 KNOWN_COLORS = {
@@ -18,7 +19,6 @@ KNOWN_COLORS = {
     "cyan": (0, 255, 255),
     "magenta": (255, 0, 255),
     "gray": (128, 128, 128),
-    # Add more colors as needed...
 }
 
 # Map color names to their approximate visible light wavelengths (in nm)
@@ -90,11 +90,13 @@ def get_all_colors(image_path):
 
     return unique_colors, hex_colors
 
-def get_colors_as_json(request):
-    """Django view to return all unique colors, image name, and color names in JSON format."""
+def get_colors_as_json(request, id):
+
+    gambar_instance = gambar.objects.get(id=id)
+
     # Image path and name
-    image_name = 'rising_freedom.jpg'
-    image_path = os.path.join(settings.MEDIA_ROOT, 'upload/files', image_name)  # Correct path
+    image_name = gambar_instance.gambar.name
+    image_path = os.path.join(settings.MEDIA_ROOT, image_name)  # Correct path
     
     # Get unique colors and hex values
     unique_colors, hex_colors = get_all_colors(image_path)
@@ -124,6 +126,8 @@ def get_colors_as_json(request):
 
     # Return the result as a JSON response, including the image name
     return JsonResponse({
-        "image_name": image_name,
+        "name": gambar_instance.nama_gambar,
+        "keterangan": gambar_instance.keterangan,
+        "image_path": gambar_instance.gambar.url,
         "unique_colors": color_data
     })

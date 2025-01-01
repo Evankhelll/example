@@ -8,9 +8,10 @@ class gambarSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.gambar
         fields = [
+            "id",
+            "nama_gambar",
+            "keterangan",
             "gambar",
             "created",
-            "nama_gambar",
             "last_updated",
-            "keterangan",
         ]

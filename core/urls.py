@@ -9,5 +9,5 @@ router.register("gambar", api.gambarViewSet)
 
 urlpatterns = [
     path("api/v1/", include(router.urls)),  # Must use a list
-    path('dominant-colors/', views.get_colors_as_json, name='dominant_colors'),
+    path('dominant-colors/<int:id>/', views.get_colors_as_json, name='dominant_colors'),
 ]

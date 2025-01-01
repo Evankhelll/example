@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<link href="https://adminlte.io/themes/v3/plugins/select2/css/select2.min.css" rel="stylesheet">
+<link href="https://adminlte.io/themes/v3/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet">
+<style>
+    .card-img {
+        object-fit: cover; /* Ensures the image covers the card area */
+        height: 100%;     /* Makes the image fill the card */
+        width: 100%;      /* Stretches image to card width */
+    }
+
+    .color-circle {
+        width: 30px;  /* Set the diameter of the circle */
+        height: 30px; /* Set the diameter of the circle */
+        border-radius: 50%; /* This makes the element circular */
+        background-color: #d8d8d8; /* Set the hex color (change it to any hex code) */
+    }
+</style>
+{% endblock %}
+
+{% block page_title %}
+    Review Image
+{% endblock %}
+
+{% block content %}
+    
+    <div class="content-main">
+        <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <label for="select2item" class="form-label">Choose an Option</label>
+                            <select id="select2item" class="form-control select2" style="width: 100%;">
+                                <option value="" disabled selected>Select an option</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <img id="preview-img" src="https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg" alt="img" class="card-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <form enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="nama_gambar" class="form-label">Nama Gambar</label>
+                                        <input type="text" class="form-control" id="nama_gambar" name="nama_gambar" maxlength="100" disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" maxlength="100" rows="3" disabled></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="form-label">Spectrum Color</label>
+                                        <div id="wadah_spectrum"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://adminlte.io/themes/v3/plugins/select2/js/select2.full.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#select2item').select2({
+            theme: 'bootstrap4'
+        });
+
+        getIdAndName();
+
+        $('#select2item').on('change', function() {
+            var selectedId = $(this).val(); // Get the selected value (id)
+            console.log('Selected ID: ' + selectedId);
+            get_detail(selectedId);
+        });
+    });
+
+    function getIdAndName() {
+        $.ajax({
+            url: '/core/api/v1/gambar/', // API URL
+            type: 'GET', // HTTP method
+            dataType: 'json', // Expected response type
+            success: function(response) {
+            var selectElement = $('#select2item');
+            selectElement.empty(); // Clear any existing options
+
+            selectElement.append('<option value="" disabled selected>Select an option</option>');
+            
+            // Assuming response is an array of objects with 'id' and 'name' fields
+            response.forEach(function(item) {
+                // Create an option element and append it to the select element
+                selectElement.append(
+                $('<option>', {
+                    value: item.id, // Set the value as the id
+                    text: item.nama_gambar // Set the text as the name
+                })
+                );
+            });
+            },
+            error: function(xhr, status, error) {
+            console.error('Error fetching data: ' + error);
+            }
+        });
+    }
+
+    function get_detail(param) {
+        $.ajax({
+            url: '/core/dominant-colors/'+param+'/', // API URL
+            type: 'GET', // HTTP method
+            dataType: 'json', // Expected response type
+            success: function(response) {
+                console.log(response);
+
+                var container = $('#wadah_spectrum');
+
+                
+                $('#nama_gambar').val("")
+                $('#keterangan').val("")
+                $('#preview-img').attr('src', "https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg");
+
+                container.empty();
+
+                $('#nama_gambar').val(response.name || '-');
+                
+                $('#keterangan').val(response.keterangan || '-');
+                
+                var imagePath = response.image_path || "https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg";
+                
+                $('#preview-img').attr('src', imagePath);
+
+                response.unique_colors.forEach(function(colorData) {
+                    var colorCircle = $('<div>', {
+                        class: 'color-circle me-2',
+                        style: 'background-color: ' + colorData.hex + ' !important;'
+                    });
+
+                    var colorInfo = `
+                        <div style="display: flex; align-items: center;" class="mb-3">
+                            ${colorCircle[0].outerHTML} <!-- Insert color circle -->
+                            <label class="form-label mb-0 me-2 fs-5">Warna: ${colorData.name},</label>
+                            <label class="form-label mb-0 me-2 fs-5">Tone: ${colorData.tone},</label>
+                            <label class="form-label mb-0 me-2 fs-5">Color Code: ${colorData.hex},</label>
+                            <label class="form-label mb-0 fs-5">Wave Length: [${colorData.wavelength_nm[0]} - ${colorData.wavelength_nm[1]}]</label>
+                        </div>
+                    `;
+
+                    // Append the created HTML to the container
+                    container.append(colorInfo);
+                });
+
+            },
+            error: function(xhr, status, error) {
+            console.error('Error fetching data: ' + error);
+            }
+        });
+    }
+</script>
+{% endblock %}
