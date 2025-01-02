@@ -7,6 +7,12 @@ from django.conf import settings
 import os
 import math
 from .models import gambar
+from PIL import Image
+from sklearn.cluster import KMeans
+import colorsys
+from scipy.spatial import KDTree
+from webcolors import hex_to_rgb
+
 
 # Predefined set of web color names with their RGB values
 KNOWN_COLORS = {
@@ -130,4 +136,106 @@ def get_colors_as_json(request, id):
         "keterangan": gambar_instance.keterangan,
         "image_path": gambar_instance.gambar.url,
         "unique_colors": color_data
+    })
+
+CSS3_NAMES_TO_HEX = {
+    'black': '#000000',
+    'silver': '#c0c0c0',
+    'gray': '#808080',
+    'white': '#ffffff',
+    'maroon': '#800000',
+    'red': '#ff0000',
+    'purple': '#800080',
+    'fuchsia': '#ff00ff',
+    'green': '#008000',
+    'lime': '#00ff00',
+    'olive': '#808000',
+    'yellow': '#ffff00',
+    'navy': '#000080',
+    'blue': '#0000ff',
+    'teal': '#008080',
+    'aqua': '#00ffff',
+    # Add other colors as needed
+}
+
+# bagian claude.ai
+def get_color_name(rgb_tuple):
+    # Use the manually defined mappings
+    rgb_values = []
+    names = []
+
+    for color_name, hex_value in CSS3_NAMES_TO_HEX.items():
+        rgb_value = hex_to_rgb(hex_value)
+        rgb_values.append(rgb_value)
+        names.append(color_name)
+
+    kdt_db = KDTree(rgb_values)
+    distance, index = kdt_db.query(rgb_tuple)
+    return names[index]
+
+def rgb_to_wavelength(r, g, b):
+    h, s, v = colorsys.rgb_to_hsv(r/255, g/255, b/255)
+    wavelength = 380 + (h * 320)
+    return round(wavelength, 2)
+
+def get_colors_as_json2(request, id):
+    gambar_instance = gambar.objects.get(id=id)
+    
+    # Image path and name
+    image_name = gambar_instance.gambar.name
+    image_path = os.path.join(settings.MEDIA_ROOT, image_name)
+    
+    # Open the image and convert to RGB
+    img = Image.open(image_path).convert('RGB')
+    
+    # Convert the image to a numpy array and reshape
+    img_array = np.array(img)
+    pixels = img_array.reshape(-1, 3)
+    
+    # Use KMeans to detect dominant colors
+    kmeans = KMeans(n_clusters=50, random_state=42)  # Detect 10 dominant colors
+    kmeans.fit(pixels)
+    
+    # Get dominant colors and their percentages
+    colors = kmeans.cluster_centers_
+    labels = kmeans.labels_
+    total_pixels = len(labels)
+    
+    # Track seen hex codes
+    seen_hex_codes = set()
+    colors_data = []
+    
+    for i, color in enumerate(colors):
+        percentage = (np.sum(labels == i) / total_pixels) * 100
+        
+        # Convert color to integer RGB values
+        rgb = tuple(int(x) for x in color)
+        hex_code = '#{:02x}{:02x}{:02x}'.format(*rgb)
+        
+        # Skip if the hex code is already seen
+        if hex_code in seen_hex_codes:
+            continue
+        
+        # Add the hex code to the seen set
+        seen_hex_codes.add(hex_code)
+        
+        # Build the color data
+        color_info = {
+            "hex_code": hex_code,
+            "wavelength": {
+                "value": rgb_to_wavelength(*rgb),
+                "unit": "nm"
+            },
+            "percentage": round(percentage, 2)
+        }
+        colors_data.append(color_info)
+    
+    # Sort by highest percentage
+    colors_data.sort(key=lambda x: x['percentage'], reverse=True)
+    
+    return JsonResponse({
+        "name": gambar_instance.nama_gambar,
+        "keterangan": gambar_instance.keterangan,
+        "image_path": gambar_instance.gambar.url,
+        "unique_colors": colors_data
     })

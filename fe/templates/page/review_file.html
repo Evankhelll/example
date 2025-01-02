@@ -123,7 +123,7 @@
 
     function get_detail(param) {
         $.ajax({
-            url: '/core/dominant-colors/'+param+'/', // API URL
+            url: '/core/dominant-colors2/'+param+'/', // API URL
             type: 'GET', // HTTP method
             dataType: 'json', // Expected response type
             success: function(response) {
@@ -149,16 +149,14 @@
                 response.unique_colors.forEach(function(colorData) {
                     var colorCircle = $('<div>', {
                         class: 'color-circle me-2',
-                        style: 'background-color: ' + colorData.hex + ' !important;'
+                        style: 'background-color: ' + colorData.hex_code + ' !important;'
                     });
 
                     var colorInfo = `
                         <div style="display: flex; align-items: center;" class="mb-3">
                             ${colorCircle[0].outerHTML} <!-- Insert color circle -->
-                            <label class="form-label mb-0 me-2 fs-5">Warna: ${colorData.name},</label>
-                            <label class="form-label mb-0 me-2 fs-5">Tone: ${colorData.tone},</label>
-                            <label class="form-label mb-0 me-2 fs-5">Color Code: ${colorData.hex},</label>
-                            <label class="form-label mb-0 fs-5">Wave Length: [${colorData.wavelength_nm[0]} - ${colorData.wavelength_nm[1]}]</label>
+                            <label class="form-label mb-0 me-2 fs-5">Color Code: ${colorData.hex_code},</label>
+                            <label class="form-label mb-0 fs-5">Wave Length: [${colorData.wavelength.value} - ${colorData.wavelength.unit}]</label>
                         </div>
                     `;
 
