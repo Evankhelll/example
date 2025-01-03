@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="gambar" class="form-label">Upload Gambar</label>
-                                        <input type="file" class="form-control" id="gambar" name="gambar" required>
+                                        <input type="file" class="form-control" id="gambar" name="gambar" accept=".jpg, .jpeg, .png" required>
                                     </div>
                                     <div align="right">
                                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -98,8 +98,14 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    alert("Form submitted successfully!");
-                    console.log(response);
+                    // alert("Form submitted successfully!");
+                    alertSwal({
+                        title: 'Berhasil mengupload',
+                        text: 'Formulir anda berhasil diupload.',
+                        icon: 'success',
+                        showConfirmButton: true, // Show a "OK" button to close manually
+                    });
+                    window.location.reload();
                 },
                 error: function(xhr, status, error) {
                     alert("An error occurred: " + error);
@@ -111,6 +117,12 @@
         // Reset button functionality
         $('.btn-danger').on('click', function() {
             $('form')[0].reset();
+            alertSwal({
+                title: 'Gagal upload',
+                text: 'Terjadi kesalahan cek kembali form.',
+                icon: 'error',
+                showConfirmButton: true, // Show a "OK" button to close manually
+            });
         });
     });
 </script>

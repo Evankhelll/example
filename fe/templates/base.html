@@ -63,11 +63,56 @@
       integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
       crossorigin="anonymous"
     />
+    <!-- style -->
+    <style>
+      /* Full-screen loader */
+      #loading-screen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+          z-index: 9999; /* Ensure it's above all other elements */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+
+      /* Spinner animation */
+      .spinner {
+          border: 8px solid #f3f3f3; /* Light grey background */
+          border-top: 8px solid #3498db; /* Blue foreground */
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          animation: spin 1s linear infinite; /* Spin animation */
+      }
+
+      /* Keyframes for spinner */
+      @keyframes spin {
+          0% {
+              transform: rotate(0deg);
+          }
+          100% {
+              transform: rotate(360deg);
+          }
+      }
+
+      /* Hide the loading screen after page load */
+      .hidden {
+          display: none !important;
+      }
+    </style>
     {% block extra_css %} {% endblock %}
   </head>
   <!--end::Head-->
   <!--begin::Body-->
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <!--  -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+    </div>
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
       <!--begin::Header-->
@@ -132,7 +177,48 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <!-- <script src="../../dist/js/adminlte.js"></script> -->
     <script src="{% static 'alte/dist/js/adminlte.js' %}"></script>
+    <!-- swal2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+    <script>
+      $(document).ready(function () {
+          $("#loading-screen").addClass("hidden"); // Hide loading screen
+      });
+      // Function for Notifications
+      function alertSwal(options = {}) {
+          const defaultOptions = {
+              title: 'Notification',
+              text: 'This is a default notification!',
+              icon: 'info', // Can be 'success', 'error', 'warning', 'info', or 'question'
+              timer: 3000,
+              showConfirmButton: false,
+          };
+          const swalOptions = { ...defaultOptions, ...options };
+          Swal.fire(swalOptions);
+      }
+
+      // Function for Loading
+      function loadingSwal(options = {}) {
+          const defaultOptions = {
+              title: 'Loading...',
+              text: 'Please wait...',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              showConfirmButton: false,
+              willOpen: () => {
+                  Swal.showLoading();
+              },
+          };
+          const swalOptions = { ...defaultOptions, ...options };
+          Swal.fire(swalOptions);
+      }
+
+      // To close the Swal
+      function closeSwal() {
+          Swal.close();
+      }
+    </script>
     {% block extra_js %} {% endblock %}
 
     <!--end::Script-->
