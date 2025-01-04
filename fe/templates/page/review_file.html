@@ -32,9 +32,16 @@
                     <div class="card">
                         <div class="card-body">
                             <label for="select2item" class="form-label">Choose an Option</label>
-                            <select id="select2item" class="form-control select2" style="width: 100%;">
-                                <option value="" disabled selected>Select an option</option>
-                            </select>
+                            <div class="row">
+                                <div class="col-9">
+                                    <select id="select2item" class="form-control select2" style="width: 100%;">
+                                        <option value="" disabled selected>Select an option</option>
+                                    </select>
+                                </div>
+                                <div class="col-3" align="center">
+                                    <button id="hapus_gambar" type="button" class="btn btn-danger" style="width: 100%;">Hapus Gambar</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,6 +86,8 @@
 {% block extra_js %}
 <script src="https://adminlte.io/themes/v3/plugins/select2/js/select2.full.min.js"></script>
 <script>
+    var id_gambar;
+
     $(document).ready(function () {
         $('#select2item').select2({
             theme: 'bootstrap4'
@@ -88,11 +97,32 @@
 
         $('#select2item').on('change', function() {
             var selectedId = $(this).val(); // Get the selected value (id)
+            id_gambar = selectedId;
             loadingSwal({
                 title: 'Mohon Tunggu',
-                text: 'Sedang membuat file gambar',
+                text: 'Sedang memuat file gambar',
             });
             get_detail(selectedId);
+        });
+
+        $('#hapus_gambar').click(function() {
+            if (id_gambar) {
+                alertSwalConfirm(
+                    {
+                        title: 'Menghapus Gambar',
+                        text: 'Anda Yakin Untuk Menghapus Gambar ?.',
+                        icon: 'warning',
+                    },
+                    hapus_gambar // Pass your function here
+                );
+            } else {
+                alertSwal({
+                    title: 'Terjadi Kesalahan',
+                    text: 'Pilih Gambar Terlebih Dahulu.',
+                    icon: 'error',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
+            }
         });
     });
 
@@ -106,8 +136,7 @@
             selectElement.empty(); // Clear any existing options
 
             selectElement.append('<option value="" disabled selected>Select an option</option>');
-            
-            // Assuming response is an array of objects with 'id' and 'name' fields
+
             response.forEach(function(item) {
                 // Create an option element and append it to the select element
                 selectElement.append(
@@ -120,6 +149,32 @@
             },
             error: function(xhr, status, error) {
             console.error('Error fetching data: ' + error);
+            }
+        });
+    }
+
+    function hapus_gambar(){
+        $.ajax({
+            url: '/core/api/v1/gambar/'+id_gambar+'/',
+            type: 'DELETE',
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alertSwal({
+                    title: 'Berhasil Menghapus',
+                    text: 'Gambar berhasil dihapus.',
+                    icon: 'success',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
+            },
+            error: function(xhr, status, error) {
+                alertSwal({
+                    title: 'Terjadi kesalahan',
+                    text: 'Gagal Menghapus.',
+                    icon: 'error',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
+                console.log(xhr.responseText);
             }
         });
     }

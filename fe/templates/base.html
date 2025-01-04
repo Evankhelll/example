@@ -63,6 +63,7 @@
       integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
       crossorigin="anonymous"
     />
+
     <!-- style -->
     <style>
       /* Full-screen loader */
@@ -102,6 +103,10 @@
       /* Hide the loading screen after page load */
       .hidden {
           display: none !important;
+      }
+
+      .app-main{
+        padding: 0px !important;
       }
     </style>
     {% block extra_css %} {% endblock %}
@@ -197,6 +202,26 @@
           const swalOptions = { ...defaultOptions, ...options };
           Swal.fire(swalOptions);
       }
+
+      // Function for swal Confrim
+      function alertSwalConfirm(options = {}, onYesFunction = () => {}) {
+            const defaultOptions = {
+                title: 'Are you sure?',
+                text: 'You won’t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yakin',
+                cancelButtonText: 'Tidak',
+            };
+
+            const swalOptions = { ...defaultOptions, ...options };
+
+            Swal.fire(swalOptions).then((result) => {
+                if (result.isConfirmed) {
+                    onYesFunction(); // Execute the function passed as a parameter
+                }
+            });
+        }
 
       // Function for Loading
       function loadingSwal(options = {}) {

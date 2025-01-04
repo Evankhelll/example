@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block page_title %}
+    Quiz
+{% endblock %}
+
+{% block content %}
+    
+    <div class="content-main">
+        <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="container">
+                                <h1 class="text-center">Quiz App</h1>
+                                <div id="quiz-container" class="mt-4">
+                                    <h4 id="question" class="mb-4">Loading question...</h4>
+                                    <div id="answers" class="d-flex flex-column"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const questions = [
+        { question: "What is the capital of France?", answers: ["Paris", "Berlin", "Rome", "Madrid"], correct: 0 },
+        { question: "Which is the largest planet in the Solar System?", answers: ["Earth", "Mars", "Jupiter", "Venus"], correct: 2 },
+        { question: "What is 2 + 2?", answers: ["3", "4", "5", "6"], correct: 1 },
+        { question: "What is the boiling point of water?", answers: ["90°C", "100°C", "80°C", "120°C"], correct: 1 },
+    ];
+
+    let currentQuestionIndex;
+
+    function loadRandomQuestion() {
+        currentQuestionIndex = Math.floor(Math.random() * questions.length);
+        const question = questions[currentQuestionIndex];
+        $('#question').text(question.question);
+        $('#answers').empty();
+
+        question.answers.forEach((answer, index) => {
+            const answerButton = $(
+                `<button class="btn btn-outline-primary my-2" data-index="${index}">${answer}</button>`
+            );
+            $('#answers').append(answerButton);
+        });
+    }
+
+    $(document).on('click', '#answers button', function () {
+        const selectedIndex = parseInt($(this).data('index'));
+        const correctIndex = questions[currentQuestionIndex].correct;
+
+        if (selectedIndex === correctIndex) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Betul !',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                timer: 2000
+            }).then(() => {
+                loadRandomQuestion();
+            });
+        } else {
+            $(this).removeClass('btn-outline-primary').addClass('btn-danger');
+            $(`#answers button[data-index="${correctIndex}"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-success');
+
+            Swal.fire({
+                position: "top-end",
+                icon: 'error',
+                title: 'Salah !',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                timer: 2000
+            }).then(() => {
+                loadRandomQuestion();
+            });
+        }
+    });
+
+    $(document).ready(() => {
+        loadRandomQuestion();
+    });
+
+</script>
+{% endblock %}

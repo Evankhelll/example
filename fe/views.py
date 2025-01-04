@@ -9,3 +9,12 @@ def fe_upload(request):
 
 def fe_review(request):
     return render(request, 'page/review_file.html')
+
+def fe_wavelength(request):
+    return render(request, 'page/wavelength.html')
+
+def fe_materi(request):
+    return render(request, 'page/materi.html')
+
+def fe_quiz(request):
+    return render(request, 'page/quiz.html')

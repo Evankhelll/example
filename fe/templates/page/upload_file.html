@@ -85,7 +85,12 @@
 
             // Validate fields
             if (gambar === "") {
-                alert("Please upload a gambar.");
+                alertSwal({
+                    title: 'Peringatan',
+                    text: 'Gambar Tidak Boleh Kosong.',
+                    icon: 'warning',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
                 return;
             }
 
@@ -98,7 +103,6 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    // alert("Form submitted successfully!");
                     alertSwal({
                         title: 'Berhasil mengupload',
                         text: 'Formulir anda berhasil diupload.',
@@ -108,7 +112,12 @@
                     window.location.reload();
                 },
                 error: function(xhr, status, error) {
-                    alert("An error occurred: " + error);
+                    alertSwal({
+                        title: 'Gagal upload',
+                        text: 'Terjadi kesalahan.',
+                        icon: 'error',
+                        showConfirmButton: true, // Show a "OK" button to close manually
+                    });
                     console.log(xhr.responseText);
                 }
             });
@@ -117,12 +126,6 @@
         // Reset button functionality
         $('.btn-danger').on('click', function() {
             $('form')[0].reset();
-            alertSwal({
-                title: 'Gagal upload',
-                text: 'Terjadi kesalahan cek kembali form.',
-                icon: 'error',
-                showConfirmButton: true, // Show a "OK" button to close manually
-            });
         });
     });
 </script>

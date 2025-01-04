@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<style>
+
+</style>
+{% endblock %}
+
+{% block page_title %}
+    Panjang Gelombang Cahaya
+{% endblock %}
+
+{% block content %}
+    
+    <div class="content-main">
+        <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="tablestable-responsive table-striped">
+                                <table id="colorTable" class="display" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Warna</th>
+                                            <th>Nama Warna</th>
+                                            <th>Wavelength (nm)</th>
+                                            <th>Energy (eV)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script>
+    const colorData = [
+        { name: 'Red', hex: '#FF0000', wavelengthRange: [700, 660], energyRange: [1.77, 2.00] },
+        { name: 'Orange', hex: '#FFA500', wavelengthRange: [660, 610], energyRange: [2.00, 2.10] },
+        { name: 'Yellow', hex: '#FFFF00', wavelengthRange: [610, 570], energyRange: [2.10, 2.20] },
+        { name: 'Green', hex: '#00FF00', wavelengthRange: [570, 500], energyRange: [2.20, 2.50] },
+        { name: 'Blue', hex: '#0000FF', wavelengthRange: [500, 450], energyRange: [2.50, 2.75] },
+        { name: 'Violet', hex: '#8A2BE2', wavelengthRange: [450, 400], energyRange: [2.75, 3.10] }
+    ];
+
+    $(document).ready(function () {
+            // Populate the table with color data
+            const tableBody = $('#colorTable tbody');
+            colorData.forEach(color => {
+                const row = `
+                    <tr>
+                        <td style="background-color: ${color.hex}; color: white;">${color.hex}</td>
+                        <td>${color.name}</td>
+                        <td>${color.wavelengthRange[0]}–${color.wavelengthRange[1]} nm</td>
+                        <td>${color.energyRange[0]}–${color.energyRange[1]} eV</td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+
+            // Initialize DataTables
+            $('#colorTable').DataTable();
+        });
+</script>
+{% endblock %}

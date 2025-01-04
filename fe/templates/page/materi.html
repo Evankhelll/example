@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+.MJX-TEX {
+    text-align: left !important;
+}
+.formula .MathJax {
+    display: inline-block !important;
+    margin-left: 0 !important;
+}
+</style>
+{% endblock %}
+
+{% block page_title %}
+    Materi Gelombang Cahaya
+{% endblock %}
+
+{% block content %}
+    <div class="content-main">
+        <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <section>
+                                <h2>Energi Foton</h2>
+                                <p style="text-align: justify;">
+                                    Energi foton adalah jumlah energi yang dibawa oleh sebuah foton, yang merupakan partikel dasar dari cahaya atau radiasi elektromagnetik. Foton tidak memiliki massa diam dan bergerak dengan kecepatan cahaya (sekitar 299.792.458 meter per detik di ruang hampa). Energi foton bergantung pada panjang gelombang atau frekuensi cahaya tersebut. Semakin pendek panjang gelombangnya (atau semakin tinggi frekuensinya), semakin besar energi foton tersebut.
+                                </p>
+                                <h3>Rumus untuk Menghitung Energi Foton:</h3>
+                                <p>
+                                    Energi foton \(E\) dapat dihitung menggunakan rumus:
+                                </p>
+                                <p class="formula">
+                                    \[E = h \cdot f\]
+                                </p>
+                                <p>
+                                    Di mana:
+                                    <ul>
+                                        <li>\(E\) adalah energi foton (dalam joule),</li>
+                                        <li>\(h\) adalah konstanta Planck \((6.626 \times 10^{-34} \, \text{J} \cdot \text{s})\)</li>
+                                        <li>\(f\) adalah frekuensi gelombang cahaya (dalam hertz).</li>
+                                    </ul>
+                                </p>
+                            
+                                <h3>Hubungan dengan Panjang Gelombang:</h3>
+                                <p>
+                                    Karena frekuensi cahaya \(f\) dan panjang gelombang \(\lambda\) berhubungan dengan kecepatan cahaya \(c\) (yang selalu konstan dalam ruang hampa), kita dapat menulis:
+                                </p>
+                                <p class="formula">
+                                    \[f = \frac{c}{\lambda}\]
+                                </p>
+                                <p>
+                                    Dengan demikian, energi foton juga bisa dinyatakan dalam bentuk panjang gelombang sebagai:
+                                </p>
+                                <p class="formula">
+                                    \[E = \frac{h \cdot c}{\lambda}\]
+                                </p>
+                                <p>
+                                    Di mana:
+                                    <ul>
+                                        <li>\(c\) adalah kecepatan cahaya (sekitar \(3.00 \times 10^8\) meter per detik),</li>
+                                        <li>\(\lambda\) adalah panjang gelombang (dalam meter).</li>
+                                    </ul>
+                                </p>
+                            </section>
+
+                            <section id="interaktif">
+                                <h2>Simulasi Interaktif</h2>
+                                <p>Pilih panjang gelombang untuk melihat energi foton dan warna yang terkait:</p>
+                                <div class="d-flex">
+                                    <div>
+                                        <label for="wavelengthSlider">Panjang Gelombang (nm): </label>
+                                        <input id="wavelengthSlider" type="range" min="380" max="750" step="1" value="380">
+                                        <p>Panjang Gelombang: <span id="wavelengthValue">380</span> nm</p>
+                                        <p>Energi Foton: <span id="photonEnergy">0.00</span> eV</p>
+                                    </div>
+                                    <div class="ms-5">
+                                        <div id="colorPreview" style="width: 100px; height: 100px; background-color: violet; border: 1px solid #000;"></div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']]
+        }
+    };
+
+    const h = 4.1357e-15; // Planck's constant in eV.s
+    const c = 3e8; // Speed of light in m/s
+
+    $('#wavelengthSlider').on('input', function () {
+        const wavelength = $(this).val();
+        $('#wavelengthValue').text(wavelength);
+
+        const energy = (h * c) / (wavelength * 1e-9); // Energy in eV
+        $('#photonEnergy').text(energy.toFixed(2));
+
+        // Change color preview based on wavelength
+        $('#colorPreview').css('background-color', getColorFromWavelength(wavelength));
+    });
+
+    function getColorFromWavelength(wavelength) {
+        if (wavelength >= 380 && wavelength < 450) return 'purple';
+        if (wavelength >= 450 && wavelength < 495) return 'blue';
+        if (wavelength >= 495 && wavelength < 570) return 'green';
+        if (wavelength >= 570 && wavelength < 590) return 'yellow';
+        if (wavelength >= 590 && wavelength < 620) return 'orange';
+        if (wavelength >= 620 && wavelength <= 750) return 'red';
+        return 'black'; // Outside the visible spectrum
+    }
+</script>
+{% endblock %}
