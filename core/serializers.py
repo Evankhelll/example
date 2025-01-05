@@ -15,3 +15,16 @@ class gambarSerializer(serializers.ModelSerializer):
             "created",
             "last_updated",
         ]
+
+class komentarSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.gambar
+        fields = [
+            "id",
+            "nama",
+            "email",
+            "komentar",
+            "created",
+            "last_updated",
+        ]
