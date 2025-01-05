@@ -23,6 +23,7 @@
                                 <table id="colorTable" class="display" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th>Warna</th>
                                             <th>Nama Warna</th>
                                             <th>Wavelength (nm)</th>
@@ -47,20 +48,20 @@
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 <script>
     const colorData = [
-        { name: 'Red', hex: '#FF0000', wavelengthRange: [700, 660], energyRange: [1.77, 2.00] },
-        { name: 'Orange', hex: '#FFA500', wavelengthRange: [660, 610], energyRange: [2.00, 2.10] },
-        { name: 'Yellow', hex: '#FFFF00', wavelengthRange: [610, 570], energyRange: [2.10, 2.20] },
-        { name: 'Green', hex: '#00FF00', wavelengthRange: [570, 500], energyRange: [2.20, 2.50] },
-        { name: 'Blue', hex: '#0000FF', wavelengthRange: [500, 450], energyRange: [2.50, 2.75] },
-        { name: 'Violet', hex: '#8A2BE2', wavelengthRange: [450, 400], energyRange: [2.75, 3.10] }
+        { no: 1, name: 'Merah', hex: '#FF0000', wavelengthRange: [700, 660], energyRange: [1.77, 2.00] },
+        { no: 2, name: 'Jinga', hex: '#FFA500', wavelengthRange: [660, 610], energyRange: [2.00, 2.10] },
+        { no: 3, name: 'Kuning', hex: '#FFFF00', wavelengthRange: [610, 570], energyRange: [2.10, 2.20] },
+        { no: 4, name: 'Hijau', hex: '#00FF00', wavelengthRange: [570, 500], energyRange: [2.20, 2.50] },
+        { no: 5, name: 'Biru', hex: '#0000FF', wavelengthRange: [500, 450], energyRange: [2.50, 2.75] },
+        { no: 6, name: 'Ungu', hex: '#8A2BE2', wavelengthRange: [450, 400], energyRange: [2.75, 3.10] }
     ];
 
     $(document).ready(function () {
-            // Populate the table with color data
             const tableBody = $('#colorTable tbody');
             colorData.forEach(color => {
                 const row = `
                     <tr>
+                        <td>${color.no}</td>
                         <td style="background-color: ${color.hex}; color: white;">${color.hex}</td>
                         <td>${color.name}</td>
                         <td>${color.wavelengthRange[0]}–${color.wavelengthRange[1]} nm</td>
@@ -71,7 +72,15 @@
             });
 
             // Initialize DataTables
-            $('#colorTable').DataTable();
+            $('#colorTable').DataTable({
+                searching: false, // Disable the search box
+                ordering: false, // Disable column sorting
+                paging: false,    // Disable pagination
+                order: [[0, 'asc']], // Order by the first column (index 0)
+                columnDefs: [
+                    { targets: 0, visible: false } // Hide the first column
+                ]
+            });
         });
 </script>
 {% endblock %}

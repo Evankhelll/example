@@ -178,6 +178,30 @@ def rgb_to_wavelength(r, g, b):
     wavelength = 380 + (h * 320)
     return round(wavelength, 2)
 
+def wavelength_to_energy(wavelength_nm):
+    """
+    Menghitung energi foton dari panjang gelombang.
+    Args:
+        wavelength_nm: panjang gelombang dalam nanometer
+    Returns:
+        energy dalam elektronvolt (eV)
+    """
+    # Konstanta
+    h = 6.626e-34  # Konstanta Planck dalam J⋅s
+    c = 2.998e8    # Kecepatan cahaya dalam m/s
+    e = 1.602e-19  # Muatan elektron dalam Coulomb (untuk konversi ke eV)
+    
+    # Konversi wavelength dari nm ke m
+    wavelength_m = wavelength_nm * 1e-9
+    
+    # Hitung energi dalam Joule
+    energy_j = (h * c) / wavelength_m
+    
+    # Konversi ke eV
+    energy_ev = energy_j / e
+    
+    return round(energy_ev, 2)
+
 def get_colors_as_json2(request, id):
     gambar_instance = gambar.objects.get(id=id)
     
@@ -218,12 +242,20 @@ def get_colors_as_json2(request, id):
         
         # Add the hex code to the seen set
         seen_hex_codes.add(hex_code)
+
+        # Calculate wavelength
+        wavelength = rgb_to_wavelength(*rgb)
+        
+        # Calculate energy
+        energy = wavelength_to_energy(wavelength)
         
         # Build the color data
         color_info = {
             "hex_code": hex_code,
             "wavelength": {
-                "value": rgb_to_wavelength(*rgb),
+                "value": wavelength,
+                "energy": energy,
+                "energy_unit": "eV",
                 "unit": "nm"
             },
             "percentage": round(percentage, 2)

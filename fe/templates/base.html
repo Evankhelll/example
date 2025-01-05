@@ -192,36 +192,36 @@
       });
       // Function for Notifications
       function alertSwal(options = {}) {
-          const defaultOptions = {
-              title: 'Notification',
-              text: 'This is a default notification!',
-              icon: 'info', // Can be 'success', 'error', 'warning', 'info', or 'question'
-              timer: 3000,
-              showConfirmButton: false,
-          };
-          const swalOptions = { ...defaultOptions, ...options };
-          Swal.fire(swalOptions);
-      }
+        const defaultOptions = {
+            title: 'Notification',
+            text: 'This is a default notification!',
+            icon: 'info', // Can be 'success', 'error', 'warning', 'info', or 'question'
+            timer: 3000,
+            showConfirmButton: false,
+        };
+        const swalOptions = { ...defaultOptions, ...options };
+        return Swal.fire(swalOptions); // Ensure that the promise is returned
+    }
 
       // Function for swal Confrim
       function alertSwalConfirm(options = {}, onYesFunction = () => {}) {
-            const defaultOptions = {
-                title: 'Are you sure?',
-                text: 'You won’t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yakin',
-                cancelButtonText: 'Tidak',
-            };
+          const defaultOptions = {
+              title: 'Are you sure?',
+              text: 'You won’t be able to revert this!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yakin',
+              cancelButtonText: 'Tidak',
+          };
 
-            const swalOptions = { ...defaultOptions, ...options };
+          const swalOptions = { ...defaultOptions, ...options };
 
-            Swal.fire(swalOptions).then((result) => {
-                if (result.isConfirmed) {
-                    onYesFunction(); // Execute the function passed as a parameter
-                }
-            });
-        }
+          Swal.fire(swalOptions).then((result) => {
+              if (result.isConfirmed) {
+                  onYesFunction(); // Execute the function passed as a parameter
+              }
+          });
+      }
 
       // Function for Loading
       function loadingSwal(options = {}) {

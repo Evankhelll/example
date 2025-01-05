@@ -75,6 +75,12 @@
             }
         });
 
+        // Add click event listener to the image
+        $('#preview-img').on('click', function () {
+            // Trigger the file input click event
+            $('#gambar').click();
+        });
+
         $('form').on('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
 
@@ -108,8 +114,10 @@
                         text: 'Formulir anda berhasil diupload.',
                         icon: 'success',
                         showConfirmButton: true, // Show a "OK" button to close manually
+                    }).then(() => {
+                        // Reload the page after SweetAlert modal is closed
+                        window.location.reload();
                     });
-                    window.location.reload();
                 },
                 error: function(xhr, status, error) {
                     alertSwal({

@@ -166,6 +166,15 @@
                     icon: 'success',
                     showConfirmButton: true, // Show a "OK" button to close manually
                 });
+                alertSwal({
+                    title: 'Berhasil Menghapus',
+                    text: 'Gambar berhasil dihapus.',
+                    icon: 'success',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                }).then(() => {
+                    // Reload the page after SweetAlert modal is closed
+                    window.location.reload();
+                });
             },
             error: function(xhr, status, error) {
                 alertSwal({
@@ -211,7 +220,8 @@
                         <div style="display: flex; align-items: center;" class="mb-3">
                             ${colorCircle[0].outerHTML} <!-- Insert color circle -->
                             <label class="form-label mb-0 me-2 fs-5">Color Code: ${colorData.hex_code},</label>
-                            <label class="form-label mb-0 fs-5">Wave Length: [${colorData.wavelength.value} - ${colorData.wavelength.unit}]</label>
+                            <label class="form-label mb-0 me-2 fs-5">Wave Length: ${colorData.wavelength.value} ${colorData.wavelength.unit},</label>
+                            <label class="form-label mb-0 fs-5">Energy Photon: ${colorData.wavelength.energy} ${colorData.wavelength.energy_unit}</label>
                         </div>
                     `;
                     container.append(colorInfo);
