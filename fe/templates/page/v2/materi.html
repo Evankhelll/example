@@ -1,0 +1,185 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+
+    <style>
+    .MJX-TEX {
+        text-align: left !important;
+    }
+    .formula .MathJax {
+        display: inline-block !important;
+        margin-left: 0 !important;
+    }
+    .dt-layout-row:has(.dt-layout-cell.dt-layout-start) {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid page-header" style="margin-bottom: 90px;">
+    <div class="container">
+        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+            <h3 class="display-4 text-white text-uppercase">Materi</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                <p class="m-0 text-uppercase">Materi</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1>Materi Length Wave</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="contact-form bg-secondary rounded p-5">
+                    <section id="wave_length" class="mb-3">
+                        <h2>Panjang Gelombang Cahaya</h2>
+                        <hr>
+                        <div class="tablestable-responsive">
+                            <table id="colorTable" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Warna</th>
+                                        <th>Nama Warna</th>
+                                        <th>Wavelength (nm)</th>
+                                        <th>Energy (eV)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Energi Foton</h2>
+                        <p style="text-align: justify;">
+                            Energi foton adalah jumlah energi yang dibawa oleh sebuah foton, yang merupakan partikel dasar dari cahaya atau radiasi elektromagnetik. Foton tidak memiliki massa diam dan bergerak dengan kecepatan cahaya (sekitar 299.792.458 meter per detik di ruang hampa). Energi foton bergantung pada panjang gelombang atau frekuensi cahaya tersebut. Semakin pendek panjang gelombangnya (atau semakin tinggi frekuensinya), semakin besar energi foton tersebut.
+                        </p>
+                        <h3>Rumus untuk Menghitung Energi Foton:</h3>
+                        <p>
+                            Energi foton \(E\) dapat dihitung menggunakan rumus:
+                        </p>
+                        <p class="formula">
+                            \[E = h \cdot f\]
+                        </p>
+                        <p>
+                            Di mana:
+                            <ul>
+                                <li>\(E\) adalah energi foton (dalam joule),</li>
+                                <li>\(h\) adalah konstanta Planck \((6.626 \times 10^{-34} \, \text{J} \cdot \text{s})\)</li>
+                                <li>\(f\) adalah frekuensi gelombang cahaya (dalam hertz).</li>
+                            </ul>
+                        </p>
+                    
+                        <h3>Hubungan dengan Panjang Gelombang:</h3>
+                        <p>
+                            Karena frekuensi cahaya \(f\) dan panjang gelombang \(\lambda\) berhubungan dengan kecepatan cahaya \(c\) (yang selalu konstan dalam ruang hampa), kita dapat menulis:
+                        </p>
+                        <p class="formula">
+                            \[f = \frac{c}{\lambda}\]
+                        </p>
+                        <p>
+                            Dengan demikian, energi foton juga bisa dinyatakan dalam bentuk panjang gelombang sebagai:
+                        </p>
+                        <p class="formula">
+                            \[E = \frac{h \cdot c}{\lambda}\]
+                        </p>
+                        <p>
+                            Di mana:
+                            <ul>
+                                <li>\(c\) adalah kecepatan cahaya (sekitar \(3.00 \times 10^8\) meter per detik),</li>
+                                <li>\(\lambda\) adalah panjang gelombang (dalam meter).</li>
+                            </ul>
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']]
+        }
+    };
+
+    const h = 4.1357e-15; // Planck's constant in eV.s
+    const c = 3e8; // Speed of light in m/s
+
+    const colorData = [
+        { no: 1, name: 'Merah', hex: '#FF0000', wavelengthRange: [700, 660], energyRange: [1.77, 2.00] },
+        { no: 2, name: 'Jinga', hex: '#FFA500', wavelengthRange: [660, 610], energyRange: [2.00, 2.10] },
+        { no: 3, name: 'Kuning', hex: '#FFFF00', wavelengthRange: [610, 570], energyRange: [2.10, 2.20] },
+        { no: 4, name: 'Hijau', hex: '#00FF00', wavelengthRange: [570, 500], energyRange: [2.20, 2.50] },
+        { no: 5, name: 'Biru', hex: '#0000FF', wavelengthRange: [500, 450], energyRange: [2.50, 2.75] },
+        { no: 6, name: 'Ungu', hex: '#8A2BE2', wavelengthRange: [450, 400], energyRange: [2.75, 3.10] }
+    ];
+
+    $('#wavelengthSlider').on('input', function () {
+        const wavelength = $(this).val();
+        $('#wavelengthValue').text(wavelength);
+
+        const energy = (h * c) / (wavelength * 1e-9); // Energy in eV
+        $('#photonEnergy').text(energy.toFixed(2));
+
+        // Change color preview based on wavelength
+        $('#colorPreview').css('background-color', getColorFromWavelength(wavelength));
+    });
+
+    function getColorFromWavelength(wavelength) {
+        if (wavelength >= 380 && wavelength < 450) return 'purple';
+        if (wavelength >= 450 && wavelength < 495) return 'blue';
+        if (wavelength >= 495 && wavelength < 570) return 'green';
+        if (wavelength >= 570 && wavelength < 590) return 'yellow';
+        if (wavelength >= 590 && wavelength < 620) return 'orange';
+        if (wavelength >= 620 && wavelength <= 750) return 'red';
+        return 'black'; // Outside the visible spectrum
+    }
+
+    $(document).ready(function () {
+        const tableBody = $('#colorTable tbody');
+        colorData.forEach(color => {
+            const row = `
+                <tr>
+                    <td>${color.no}</td>
+                    <td style="background-color: ${color.hex}; color: white;">${color.hex}</td>
+                    <td>${color.name}</td>
+                    <td>${color.wavelengthRange[0]}–${color.wavelengthRange[1]} nm</td>
+                    <td>${color.energyRange[0]}–${color.energyRange[1]} eV</td>
+                </tr>
+            `;
+            tableBody.append(row);
+        });
+
+        // Initialize DataTables
+        $('#colorTable').DataTable({
+            searching: false, // Disable the search box
+            ordering: false, // Disable column sorting
+            paging: false,    // Disable pagination
+            order: [[0, 'asc']], // Order by the first column (index 0)
+            columnDefs: [
+                { targets: 0, visible: false } // Hide the first column
+            ]
+        });
+    });
+</script>
+{% endblock %}

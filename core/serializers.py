@@ -19,7 +19,7 @@ class gambarSerializer(serializers.ModelSerializer):
 class komentarSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.gambar
+        model = models.komentar
         fields = [
             "id",
             "nama",

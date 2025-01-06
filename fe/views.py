@@ -18,3 +18,18 @@ def fe_materi(request):
 
 def fe_quiz(request):
     return render(request, 'page/quiz.html')
+
+def fe_indexv2(request):
+    return render(request, 'page/v2/index.html')
+
+def fe_uploadv2(request):
+    return render(request, 'page/v2/upload.html')
+
+def fe_reviewv2(request):
+    return render(request, 'page/v2/review.html')
+
+def fe_materiv2(request):
+    return render(request, 'page/v2/materi.html')
+
+def fe_quizv2(request):
+    return render(request, 'page/v2/quiz.html')

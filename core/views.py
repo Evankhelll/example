@@ -217,7 +217,7 @@ def get_colors_as_json2(request, id):
     pixels = img_array.reshape(-1, 3)
     
     # Use KMeans to detect dominant colors
-    kmeans = KMeans(n_clusters=50, random_state=42)  # Detect 10 dominant colors
+    kmeans = KMeans(n_clusters=100, random_state=42)  # Detect 10 dominant colors
     kmeans.fit(pixels)
     
     # Get dominant colors and their percentages

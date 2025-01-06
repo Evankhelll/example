@@ -1,0 +1,369 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .btn-outline-primary {
+        color: #007bff; /* AdminLTE primary blue */
+        border-color: #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        color: #ffffff; /* White text on hover */
+        background-color: #007bff; /* Solid primary blue background */
+        border-color: #007bff;
+    }
+
+    /* Disabled state */
+    .btn-outline-primary:disabled,
+    .btn-outline-primary.disabled {
+        color: #6c757d; /* Disabled text color */
+        background-color: transparent; /* No background */
+        border-color: #6c757d; /* Disabled border color */
+        cursor: not-allowed; /* Show 'not-allowed' cursor */
+        opacity: 0.65; /* Reduced opacity to indicate disabled */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid page-header" style="margin-bottom: 90px;">
+    <div class="container">
+        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+            <h3 class="display-4 text-white text-uppercase">Quiz</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                <p class="m-0 text-uppercase">Quiz</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1>Quiz Length Wave</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="contact-form bg-secondary rounded p-5">
+                    <div id="quiz-container" class="mt-4">
+                        <h4 id="question" class="mb-4">Loading question...</h4>
+                        <!-- <div id="explanation"></div> -->
+                        <div class="alert alert-primary alert-dismissible" id="explanation" style="display: none;">
+                            
+                        </div>
+                        <div id="answers" class="d-flex flex-column"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const questions = [
+        {
+            question: "Apa yang dimaksud dengan spektrum warna?",
+            answers: [
+                { text: "Rentang energi foton yang dipancarkan oleh atom", correct: false },
+                { text: "Rentang panjang gelombang cahaya yang terlihat oleh mata manusia", correct: true },
+                { text: "Rentang panjang gelombang gelombang radio", correct: false },
+                { text: "Rentang panjang gelombang sinar-X", correct: false }
+            ],
+            explanation: "Spektrum warna adalah rentang panjang gelombang cahaya yang dapat dilihat oleh mata manusia, dari merah (gelombang panjang) hingga ungu (gelombang pendek)."
+        },
+        {
+            question: "Urutan warna dalam spektrum cahaya tampak dari panjang gelombang terpanjang ke terpendek adalah:",
+            answers: [
+                { text: "Merah, Jingga, Kuning, Hijau, Biru, Nila, Ungu", correct: true },
+                { text: "Merah, Kuning, Hijau, Biru, Ungu, Nila, Jingga", correct: false },
+                { text: "Merah, Biru, Kuning, Ungu, Nila, Hijau, Jingga", correct: false },
+                { text: "Biru, Hijau, Merah, Nila, Ungu, Jingga, Kuning", correct: false }
+            ],
+            explanation: "Urutan warna dalam spektrum cahaya tampak dimulai dari merah (terpanjang) hingga ungu (terpendek)."
+        },
+        {
+            question: "Cahaya merah memiliki panjang gelombang sekitar 650 nm. Hitung frekuensi cahaya merah jika kecepatan cahaya di udara adalah 3 × 10^8 m/s!",
+            answers: [
+                { text: "4.6 × 10¹⁴ Hz", correct: true },
+                { text: "4.6 × 10¹³ Hz", correct: false },
+                { text: "3.6 × 10¹⁴ Hz", correct: false },
+                { text: "5.6 × 10¹⁴ Hz", correct: false }
+            ],
+            explanation: "Frekuensi cahaya merah dihitung menggunakan rumus f = c/λ, menghasilkan 4.6 × 10¹⁴ Hz."
+        },
+        {
+            question: "Berapa panjang gelombang cahaya biru yang memiliki frekuensi 6.0 × 10¹⁴ Hz?",
+            answers: [
+                { text: "400 nm", correct: false },
+                { text: "500 nm", correct: true },
+                { text: "600 nm", correct: false },
+                { text: "700 nm", correct: false }
+            ],
+            explanation: "Panjang gelombang cahaya biru dihitung dengan rumus λ = c/f, menghasilkan 500 nm."
+        },
+        {
+            question: "Energi foton cahaya dengan panjang gelombang 500 nm dapat dihitung menggunakan rumus E = hc/λ. Jika h = 6.626 × 10^-34 J·s dan c = 3 × 10^8 m/s, berapa energi foton tersebut?",
+            answers: [
+                { text: "3.97 × 10⁻¹⁹ J", correct: true },
+                { text: "2.67 × 10⁻¹⁹ J", correct: false },
+                { text: "1.33 × 10⁻¹⁹ J", correct: false },
+                { text: "6.5 × 10⁻²⁰ J", correct: false }
+            ],
+            explanation: "Energi foton cahaya dihitung dengan rumus E = hc/λ, menghasilkan 3.97 × 10⁻¹⁹ J."
+        },
+        {
+            question: "Jika cahaya dengan panjang gelombang 400 nm dihantar melalui prisma dan dibagi menjadi berbagai warna, berapakah energi foton cahaya ungu?",
+            answers: [
+                { text: "5.0 × 10⁻¹⁹ J", correct: true },
+                { text: "6.0 × 10⁻²⁰ J", correct: false },
+                { text: "4.0 × 10⁻¹⁹ J", correct: false },
+                { text: "3.5 × 10⁻¹⁹ J", correct: false }
+            ],
+            explanation: "Energi foton cahaya ungu dihitung berdasarkan panjang gelombangnya, yang sekitar 400 nm, menghasilkan 5.0 × 10⁻¹⁹ J."
+        },
+        {
+            question: "Cahaya ultraviolet memiliki panjang gelombang 200 nm. Jika kecepatan cahaya adalah 3 × 10^8 m/s, berapa frekuensi cahaya ultraviolet tersebut?",
+            answers: [
+                { text: "1.5 × 10¹⁵ Hz", correct: false },
+                { text: "1.5 × 10¹⁶ Hz", correct: true },
+                { text: "1.0 × 10¹⁶ Hz", correct: false },
+                { text: "5.0 × 10¹⁵ Hz", correct: false }
+            ],
+            explanation: "Frekuensi cahaya ultraviolet dihitung menggunakan rumus f = c/λ, menghasilkan 1.5 × 10¹⁶ Hz."
+        },
+        {
+            question: "Pada panjang gelombang berapa cahaya memiliki frekuensi sebesar 5 × 10¹⁴ Hz?",
+            answers: [
+                { text: "400 nm", correct: false },
+                { text: "500 nm", correct: true },
+                { text: "600 nm", correct: false },
+                { text: "700 nm", correct: false }
+            ],
+            explanation: "Dengan rumus λ = c/f, panjang gelombang cahaya dengan frekuensi 5 × 10¹⁴ Hz adalah 600 nm."
+        },
+        {
+            question: "Energi foton cahaya yang dipancarkan dengan panjang gelombang 600 nm adalah?",
+            answers: [
+                { text: "3.0 × 10⁻¹⁹ J", correct: false },
+                { text: "3.2 × 10⁻¹⁹ J", correct: true },
+                { text: "4.0 × 10⁻¹⁹ J", correct: false },
+                { text: "5.0 × 10⁻¹⁹ J", correct: false }
+            ],
+            explanation: "Energi foton dihitung dengan rumus E = hc/λ, untuk panjang gelombang 600 nm menghasilkan 3.2 × 10⁻¹⁹ J."
+        },
+        {
+            question: "Jika sebuah atom menyerap foton dengan panjang gelombang 300 nm dan kemudian memancarkan foton dengan panjang gelombang 600 nm, energi foton yang dipancarkan lebih besar atau lebih kecil? Jelaskan.",
+            answers: [
+                { text: "Lebih besar, karena panjang gelombang yang lebih pendek berarti lebih besar energi", correct: false },
+                { text: "Lebih kecil, karena panjang gelombang yang lebih panjang berarti lebih besar energi", correct: false },
+                { text: "Lebih kecil, karena foton yang dipancarkan adalah hasil dari penurunan energi", correct: true },
+                { text: "Tidak dapat dihitung tanpa data lebih lanjut", correct: false }
+            ],
+            explanation: "Semakin panjang gelombang foton yang dipancarkan, semakin kecil energi foton tersebut dibandingkan dengan foton yang diserap oleh atom."
+        },
+        {
+            question: "Panjang gelombang cahaya hijau adalah sekitar 500 nm. Hitung frekuensi cahaya hijau jika kecepatan cahaya adalah 3 × 10^8 m/s.",
+            answers: [
+                { text: "6.0 × 10¹⁴ Hz", correct: true },
+                { text: "5.5 × 10¹⁴ Hz", correct: false },
+                { text: "7.0 × 10¹⁴ Hz", correct: false },
+                { text: "8.0 × 10¹⁴ Hz", correct: false }
+            ],
+            explanation: "Frekuensi cahaya hijau dihitung dengan rumus f = c/λ, menghasilkan 6.0 × 10¹⁴ Hz."
+        },
+        {
+            question: "Apa yang dimaksud dengan foton?",
+            answers: [
+                { text: "Partikel yang membawa energi dalam bentuk cahaya", correct: true },
+                { text: "Partikel yang membawa massa", correct: false },
+                { text: "Gelombang elektromagnetik", correct: false },
+                { text: "Sebuah proton yang memiliki muatan positif", correct: false }
+            ],
+            explanation: "Foton adalah partikel yang membawa energi cahaya dalam bentuk gelombang elektromagnetik."
+        },
+        {
+            question: "Apa hubungan antara panjang gelombang dan frekuensi cahaya?",
+            answers: [
+                { text: "Panjang gelombang berbanding terbalik dengan frekuensi", correct: true },
+                { text: "Panjang gelombang berbanding lurus dengan frekuensi", correct: false },
+                { text: "Panjang gelombang dan frekuensi tidak berhubungan", correct: false },
+                { text: "Panjang gelombang hanya berhubungan dengan warna", correct: false }
+            ],
+            explanation: "Panjang gelombang berbanding terbalik dengan frekuensi. Semakin panjang gelombang, semakin rendah frekuensinya."
+        },
+        {
+            question: "Energi foton dapat dihitung dengan rumus E = hc/λ. Apa yang dimaksud dengan h dalam rumus tersebut?",
+            answers: [
+                { text: "Kecepatan cahaya", correct: false },
+                { text: "Konstanta Planck", correct: true },
+                { text: "Massa foton", correct: false },
+                { text: "Frekuensi foton", correct: false }
+            ],
+            explanation: "h adalah konstanta Planck, yang memiliki nilai 6.626 × 10^-34 J·s."
+        },
+        {
+            question: "Pada panjang gelombang 700 nm, energi foton adalah?",
+            answers: [
+                { text: "2.5 × 10⁻²⁰ J", correct: true },
+                { text: "3.0 × 10⁻¹⁹ J", correct: false },
+                { text: "1.0 × 10⁻¹⁹ J", correct: false },
+                { text: "5.0 × 10⁻¹⁹ J", correct: false }
+            ],
+            explanation: "Energi foton cahaya merah dengan panjang gelombang 700 nm dihitung menggunakan rumus E = hc/λ, menghasilkan 2.5 × 10⁻²⁰ J."
+        },
+        {
+            question: "Cahaya dengan panjang gelombang 450 nm memiliki energi foton sebesar?",
+            answers: [
+                { text: "4.5 × 10⁻¹⁹ J", correct: true },
+                { text: "5.5 × 10⁻¹⁹ J", correct: false },
+                { text: "3.5 × 10⁻¹⁹ J", correct: false },
+                { text: "6.0 × 10⁻¹⁹ J", correct: false }
+            ],
+            explanation: "Energi foton dihitung dengan rumus E = hc/λ untuk panjang gelombang 450 nm, menghasilkan 4.5 × 10⁻¹⁹ J."
+        },
+        {
+            question: "Pada spektrum cahaya tampak, warna apa yang memiliki panjang gelombang paling pendek?",
+            answers: [
+                { text: "Merah", correct: false },
+                { text: "Biru", correct: false },
+                { text: "Ungu", correct: true },
+                { text: "Kuning", correct: false }
+            ],
+            explanation: "Warna ungu memiliki panjang gelombang paling pendek dalam spektrum cahaya tampak."
+        },
+        {
+            question: "Apa yang dimaksud dengan efek fotolistrik?",
+            answers: [
+                { text: "Pembentukan gelombang elektromagnetik dari cahaya", correct: false },
+                { text: "Pelepasan elektron dari permukaan logam ketika terkena cahaya", correct: true },
+                { text: "Cahaya yang dipantulkan dari permukaan logam", correct: false },
+                { text: "Proses pemecahan foton menjadi elektron", correct: false }
+            ],
+            explanation: "Efek fotolistrik adalah pelepasan elektron dari permukaan logam ketika logam tersebut disinari cahaya."
+        },
+        {
+            question: "Mengapa cahaya biru lebih energik daripada cahaya merah?",
+            answers: [
+                { text: "Karena panjang gelombangnya lebih panjang", correct: false },
+                { text: "Karena panjang gelombangnya lebih pendek", correct: true },
+                { text: "Karena lebih terang", correct: false },
+                { text: "Karena fotonnya lebih besar", correct: false }
+            ],
+            explanation: "Cahaya biru memiliki panjang gelombang yang lebih pendek, yang berarti energi fotonnya lebih besar."
+        },
+        {
+            question: "Apa yang dimaksud dengan spektrum emisi?",
+            answers: [
+                { text: "Spektrum warna yang terlihat oleh manusia", correct: false },
+                { text: "Spektrum yang dihasilkan oleh atom saat menyerap foton", correct: false },
+                { text: "Spektrum cahaya yang dipancarkan oleh atom atau molekul", correct: true },
+                { text: "Spektrum yang dihasilkan oleh gelombang radio", correct: false }
+            ],
+            explanation: "Spektrum emisi adalah spektrum cahaya yang dipancarkan oleh atom atau molekul ketika mereka kembali ke keadaan energi rendah setelah tereksitasi."
+        }
+    ];
+
+
+
+    let currentQuestionIndex;
+
+    function shuffleArray(array) {
+        // Shuffle the array using Fisher-Yates algorithm
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
+    }
+
+    function loadRandomQuestion() {
+        $('#explanation').hide();
+
+        currentQuestionIndex = Math.floor(Math.random() * questions.length);
+        const question = questions[currentQuestionIndex];
+        $('#question').text(question.question);
+        $('#answers').empty();
+        $('#explanation').empty();
+
+        // Shuffle the answers before displaying them
+        shuffleArray(question.answers);
+
+        question.answers.forEach((answer, index) => {
+            const answerButton = $(`
+                <button class="btn btn-outline-primary my-2" data-index="${index}">
+                    ${answer.text}
+                </button>
+            `);
+            $('#answers').append(answerButton);
+        });
+    }
+
+    $(document).on('click', '#answers button', function () {
+        const selectedIndex = parseInt($(this).data('index'));
+        const correctIndex = questions[currentQuestionIndex].answers.findIndex(answer => answer.correct);
+
+        // Disable all buttons to prevent further clicks
+        $('#answers button').prop('disabled', true);
+
+        if (selectedIndex === correctIndex) {
+            $(`#answers button[data-index="${correctIndex}"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-success');
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Betul !',
+                position: "top",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                backdrop: false,
+                timer: 5000,
+                timerProgressBar: true, // Enable progress bar
+            }).then(() => {
+                loadRandomQuestion();
+            });
+        } else {
+            $(this).removeClass('btn-outline-primary').addClass('btn-danger');
+            $(`#answers button[data-index="${correctIndex}"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-success');
+
+            // Show explanation
+            showExplanation(questions[currentQuestionIndex].explanation);
+
+            Swal.fire({
+                position: "top",
+                icon: 'error',
+                title: 'Salah !',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                backdrop: false,
+                timer: 5000,
+                timerProgressBar: true, // Enable progress bar
+            }).then(() => {
+                loadRandomQuestion();
+            });
+        }
+    });
+
+
+    function showExplanation(explanation) {
+        $('#explanation').html(`
+        <h5><i class="fas fa-exclamation-triangle"></i> Peringatan Penjelasan!</h5>
+        ${explanation}`);
+        $('#explanation').show();
+    }
+
+    $(document).ready(() => {
+        loadRandomQuestion();
+    });
+
+</script>
+{% endblock %}

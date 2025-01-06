@@ -6,6 +6,7 @@ from . import api
 
 router = routers.DefaultRouter()
 router.register("gambar", api.gambarViewSet)
+router.register("komentar", api.komentarViewSet)
 
 urlpatterns = [
     path("api/v1/", include(router.urls)),  # Must use a list

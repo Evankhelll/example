@@ -1,0 +1,256 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="https://adminlte.io/themes/v3/plugins/select2/css/select2.min.css" rel="stylesheet">
+<link href="https://adminlte.io/themes/v3/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+<style>
+    .selek2 {
+        border: none !important; /* Equivalent to Bootstrap's border-0 */
+        padding: 1rem !important; /* Equivalent to Bootstrap's p-4 */
+    }
+
+    .color-circle {
+        display: inline-block;
+        border: 1px solid #ddd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid page-header" style="margin-bottom: 90px;">
+    <div class="container">
+        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+            <h3 class="display-4 text-white text-uppercase">Review File</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                <p class="m-0 text-uppercase">Review File</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1>Check Image Length Wave</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="contact-form bg-secondary rounded p-5">
+                    <div id="success"></div>
+                        <div class="control-group mb-4">
+                            <select id="select2item" class="form-control select2 selek2" style="width: 100%;">
+                                <option value="" disabled selected>Select an option</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group" style="display: none;">
+                            <input type="text" class="form-control border-0 p-4" id="nama_gambar" placeholder="Name Image" required="required" data-validation-required-message="Image Name" />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <textarea class="form-control border-0 py-3 px-4" rows="5" id="keterangan" placeholder="Message" required="required" data-validation-required-message="Please enter Description"></textarea>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group" style="display: none;">
+                            <input type="file" class="form-control" id="gambar" name="gambar" accept=".jpg, .jpeg, .png" required>
+                        </div>
+                        <div class="control-group">
+                            <img id="preview-img" src="https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg" alt="img" class="card-img">
+                        </div>
+                        <div class="text-center pt-5">
+                            <button class="btn btn-danger py-3 px-5" type="button" id="hapus_gambar">Delete Image</button>
+                        </div>
+                        <div class="control-group pt-5" id="table_warna">
+                            <div class="control-group">
+                                <div id="wadah_spectrum" style="border-radius: 10px; background: white;">
+                                    <table id="spectrum_table" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Color Preview</th>
+                                                <th>Color Code</th>
+                                                <th>Wave Length</th>
+                                                <th>Energy Photon</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://adminlte.io/themes/v3/plugins/select2/js/select2.full.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+<script>
+    var id_gambar;
+
+    $(document).ready(function () {
+        $('#select2item').select2({
+            theme: 'bootstrap4'
+        });
+        $('#select2item').addClass('border-0 p-4');
+
+        getIdAndName();
+
+        $('#select2item').on('change', function() {
+            // $('#table_warna').hide();
+            var selectedId = $(this).val(); // Get the selected value (id)
+            id_gambar = selectedId;
+            loadingSwal({
+                title: 'Mohon Tunggu',
+                text: 'Sedang memuat file gambar',
+            });
+            get_detail(selectedId);
+        });
+
+        $('#hapus_gambar').click(function() {
+            if (id_gambar) {
+                alertSwalConfirm(
+                    {
+                        title: 'Menghapus Gambar',
+                        text: 'Anda Yakin Untuk Menghapus Gambar ?.',
+                        icon: 'warning',
+                    },
+                    hapus_gambar // Pass your function here
+                );
+            } else {
+                alertSwal({
+                    title: 'Terjadi Kesalahan',
+                    text: 'Pilih Gambar Terlebih Dahulu.',
+                    icon: 'error',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
+            }
+        });
+    });
+
+    function getIdAndName() {
+        $.ajax({
+            url: '/core/api/v1/gambar/', // API URL
+            type: 'GET', // HTTP method
+            dataType: 'json', // Expected response type
+            success: function(response) {
+            var selectElement = $('#select2item');
+            selectElement.empty(); // Clear any existing options
+
+            selectElement.append('<option value="" disabled selected>Select an option</option>');
+
+            response.forEach(function(item) {
+                // Create an option element and append it to the select element
+                selectElement.append(
+                $('<option>', {
+                    value: item.id, // Set the value as the id
+                    text: item.nama_gambar // Set the text as the name
+                })
+                );
+            });
+            },
+            error: function(xhr, status, error) {
+            console.error('Error fetching data: ' + error);
+            }
+        });
+    }
+
+    function hapus_gambar(){
+        $.ajax({
+            url: '/core/api/v1/gambar/'+id_gambar+'/',
+            type: 'DELETE',
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alertSwal({
+                    title: 'Berhasil Menghapus',
+                    text: 'Gambar berhasil dihapus.',
+                    icon: 'success',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
+                alertSwal({
+                    title: 'Berhasil Menghapus',
+                    text: 'Gambar berhasil dihapus.',
+                    icon: 'success',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                }).then(() => {
+                    // Reload the page after SweetAlert modal is closed
+                    window.location.reload();
+                });
+            },
+            error: function(xhr, status, error) {
+                alertSwal({
+                    title: 'Terjadi kesalahan',
+                    text: 'Gagal Menghapus.',
+                    icon: 'error',
+                    showConfirmButton: true, // Show a "OK" button to close manually
+                });
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+    function get_detail(param) {
+    $.ajax({
+        url: '/core/dominant-colors2/'+param+'/',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            $('#nama_gambar').val(response.name || '-');
+            $('#keterangan').val(response.keterangan || '-');
+            $('#preview-img').attr('src', response.image_path || "https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg");
+            
+            // Initialize DataTable if it doesn't exist
+            if (!$.fn.DataTable.isDataTable('#spectrum_table')) {
+                $('#wadah_spectrum').html('<table id="spectrum_table" class="table table-striped"><thead><tr><th>Color Preview</th><th>Color Code</th><th>Wave Length</th><th>Energy Photon</th></tr></thead></table>');
+                
+                $('#spectrum_table').DataTable({
+                    data: [],
+                    columns: [
+                        { 
+                            data: 'hex_code',
+                            render: function(data) {
+                                return '<div class="color-circle" style="width: 30px; height: 30px; border-radius: 50%; background-color: ' + data + '"></div>';
+                            }
+                        },
+                        { data: 'hex_code' },
+                        { 
+                            data: 'wavelength',
+                            render: function(data) {
+                                return data.value + ' ' + data.unit;
+                            }
+                        },
+                        { 
+                            data: 'wavelength',
+                            render: function(data) {
+                                return data.energy + ' ' + data.energy_unit;
+                            }
+                        }
+                    ],
+                    responsive: true,
+                    ordering: true,
+                    searching: true
+                });
+            }
+
+            // Update table data
+            var table = $('#spectrum_table').DataTable();
+            table.clear().rows.add(response.unique_colors).draw();
+            closeSwal();
+        },
+        error: function(xhr, status, error) {
+            closeSwal();
+            console.error('Error fetching data: ' + error);
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gelombang Cahaya</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <!-- <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"> -->
+    <link href="{% static 'oc/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <!-- <link href="css/style.css" rel="stylesheet"> -->
+    <link href="{% static 'oc/css/style.css' %}" rel="stylesheet">
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <div class="container-fluid">
+        <div class="row border-top px-xl-5">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
+                    <a href="" class="text-decoration-none d-block d-lg-none">
+                        <h1 class="m-0">Gelombang Cahaya</h1>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav py-0">
+                            <a href="/v2/" class="nav-item nav-link">Home</a>
+                            <a href="/v2/upload/" class="nav-item nav-link">Upload Image</a>
+                            <a href="/v2/review/" class="nav-item nav-link">Review Image</a>
+                            <a href="/v2/materi/" class="nav-item nav-link">Materi</a>
+                            <a href="/v2/quiz/" class="nav-item nav-link">Quiz</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+    
+    <!-- content -->
+    {% block content %} {% endblock %}
+    <!--  -->
+    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
+        <div class="row">
+            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+                <p class="m-0 text-white">&copy; <a href="https://oraicon.vercel.app/">All Rights Reserved. Designed by Owner</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <script src="{% static 'oc/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'oc/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Contact Javascript File -->
+    <!-- <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script> -->
+
+    <!-- Template Javascript -->
+    <!-- <script src="js/main.js"></script> -->
+    <script src="{% static 'oc/js/main.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Function for Notifications
+        function alertSwal(options = {}) {
+          const defaultOptions = {
+              title: 'Notification',
+              text: 'This is a default notification!',
+              icon: 'info', // Can be 'success', 'error', 'warning', 'info', or 'question'
+              timer: 3000,
+              showConfirmButton: false,
+          };
+          const swalOptions = { ...defaultOptions, ...options };
+          return Swal.fire(swalOptions); // Ensure that the promise is returned
+      }
+  
+        // Function for swal Confrim
+        function alertSwalConfirm(options = {}, onYesFunction = () => {}) {
+            const defaultOptions = {
+                title: 'Are you sure?',
+                text: 'You won’t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yakin',
+                cancelButtonText: 'Tidak',
+            };
+  
+            const swalOptions = { ...defaultOptions, ...options };
+  
+            Swal.fire(swalOptions).then((result) => {
+                if (result.isConfirmed) {
+                    onYesFunction(); // Execute the function passed as a parameter
+                }
+            });
+        }
+  
+        // Function for Loading
+        function loadingSwal(options = {}) {
+            const defaultOptions = {
+                title: 'Loading...',
+                text: 'Please wait...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                },
+            };
+            const swalOptions = { ...defaultOptions, ...options };
+            Swal.fire(swalOptions);
+        }
+  
+        // To close the Swal
+        function closeSwal() {
+            Swal.close();
+        }
+
+        $(document).ready(function() {
+            var currentPath = window.location.pathname;
+
+            $('a.nav-item.nav-link').each(function() {
+                if ($(this).attr('href') === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
+    {% block extra_js %} {% endblock %}
+</body>
+
+</html>

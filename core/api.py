@@ -10,7 +10,7 @@ class gambarViewSet(viewsets.ModelViewSet):
     queryset = models.gambar.objects.all()
     serializer_class = serializers.gambarSerializer
 
-class gambarViewSet(viewsets.ModelViewSet):
+class komentarViewSet(viewsets.ModelViewSet):
     """ViewSet for the gambar class"""
 
     queryset = models.komentar.objects.all()
