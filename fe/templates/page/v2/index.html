@@ -13,7 +13,7 @@
             <li data-target="#header-carousel" data-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
-            <div class="carousel-item active" style="min-height: 300px;">
+            <div class="carousel-item active" data-interval="2000" style="min-height: 300px;">
                 <img class="position-relative w-100" src="{% static 'oc/img/carousel-1.jpg' %}" style="min-height: 300px; object-fit: cover;">
                 <div class="carousel-caption d-flex align-items-center justify-content-center">
                     <div class="p-5" style="width: 100%; max-width: 900px;">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" style="min-height: 300px;">
+            <div class="carousel-item" data-interval="2000" style="min-height: 300px;">
                 <img class="position-relative w-100" src="{% static 'oc/img/carousel-2.jpg' %}" style="min-height: 300px; object-fit: cover;">
                 <div class="carousel-caption d-flex align-items-center justify-content-center">
                     <div class="p-5" style="width: 100%; max-width: 900px;">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" style="min-height: 300px;">
+            <div class="carousel-item"  data-interval="2000" style="min-height: 300px;">
                 <img class="position-relative w-100" src="{% static 'oc/img/carousel-3.jpg' %}" style="min-height: 300px; object-fit: cover;">
                 <div class="carousel-caption d-flex align-items-center justify-content-center">
                     <div class="p-5" style="width: 100%; max-width: 900px;">
@@ -55,12 +55,12 @@
             </div>
             <div class="col-lg-7">
                 <div class="text-left mb-4">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">About Website</h5>
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tentang Website</h5>
                     <h1>Simulasi Gelombang Cahaya</h1>
                 </div>
                 <p style="text-align: justify;">Website ini dirancang untuk membaca spektrum warna dari cahaya tampak menggunakan file gambar yang diunggah oleh pengguna. Website ini memiliki fitur untuk pengguna dapat mengunggah gambar dan menyimpannya di database, kemudian sistem akan menganalisis spektrum warna yang terkandung dalam gambar tersebut. Dengan antarmuka yang intuitif dan mudah digunakan, website ini cocok untuk siapa saja yang ingin mempelajari distribusi warna dalam gambar secara visual dengan konsep sederhana. Proyek ini dibuat sebagai pembelajaran awal untuk menggabungkan teknologi spektrum warna dalam konteks yang sederhana namun bermanfaat.
                 </p>
-                <a href="" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Learn More</a>
+                <a href="/v2/materi/" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Lihat Materi</a>
             </div>
         </div>
     </div>
@@ -73,7 +73,6 @@
     <div class="container pt-5 pb-3">
         <div class="text-center mb-5">
             <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Fitur Website</h5>
-            <h1>Simulasi Gelombang Cahaya</h1>
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-4">
@@ -122,7 +121,7 @@
             <div class="col-8">
                 <div class="card border-0">
                     <div class="card-header bg-light text-center p-4">
-                        <h1 class="m-0">Give Us Coment</h1>
+                        <h1 class="m-0">Beri Kita Masukan</h1>
                     </div>
                     <div class="card-body rounded-bottom bg-primary p-5">
                         <form id="commentForm">
@@ -136,7 +135,7 @@
                                 <textarea name="message" class="form-control border-0 p-4" placeholder="Your message" rows="5" required="required"></textarea>
                             </div>
                             <div>
-                                <button class="btn btn-dark btn-block border-0 py-3" type="submit">Send Coment</button>
+                                <button class="btn btn-dark btn-block border-0 py-3" type="submit">Kirim Masukan</button>
                             </div>
                         </form>
                     </div>
@@ -153,7 +152,7 @@
     <div class="container py-5">
         <div class="text-center mb-5">
             <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Testimonial</h5>
-            <h1>What Say Our Students</h1>
+            <h1>Masukan Dari Netizen</h1>
         </div>
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -190,7 +189,7 @@
                 contentType: 'application/json', // Set correct content type
                 success: function(response) {
                     alertSwal({
-                        title: 'Berhasil mengupload',
+                        title: 'Berhasil Komentar',
                         text: 'Komentar Tersimpan.',
                         icon: 'success',
                         showConfirmButton: true, // Show a "OK" button to close manually
@@ -200,7 +199,7 @@
                 },
                 error: function(xhr, status, error) {
                     alertSwal({
-                        title: 'Gagal upload',
+                        title: 'Gagal Komentar',
                         text: 'Terjadi kesalahan.',
                         icon: 'error',
                         showConfirmButton: true, // Show a "OK" button to close manually
@@ -211,7 +210,7 @@
         });
     });
 
-    function load_komen(){
+    function load_komen() {
         $.ajax({
             url: '/core/api/v1/komentar/', // API endpoint
             type: 'GET',
@@ -223,6 +222,10 @@
                 // Take the last 10 entries
                 const latestTen = sortedData.slice(0, 10);
 
+                // Clear any existing content before appending
+                const $carousel = $('.testimonial-carousel');
+                $carousel.empty();
+
                 // Loop through the data and append to the testimonial carousel
                 latestTen.forEach(item => {
                     const testimonialHtml = `
@@ -233,12 +236,14 @@
                             <span>${item.email}</span>
                         </div>
                     `;
-                    // Append to owl-carousel div
-                    $('.testimonial-carousel').append(testimonialHtml);
+                    $carousel.append(testimonialHtml);
                 });
 
-                // Initialize/re-initialize owl-carousel
-                $(".owl-carousel").owlCarousel({
+                // Destroy any previously initialized Owl Carousel
+                $carousel.trigger('destroy.owl.carousel');
+
+                // Reinitialize Owl Carousel
+                $carousel.owlCarousel({
                     items: 1,
                     loop: true,
                     autoplay: true,

@@ -23,11 +23,11 @@
 <div class="container-fluid page-header" style="margin-bottom: 90px;">
     <div class="container">
         <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-            <h3 class="display-4 text-white text-uppercase">Review File</h3>
+            <h3 class="display-4 text-white text-uppercase">Tinjau Gambar</h3>
             <div class="d-inline-flex text-white">
-                <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                <p class="m-0 text-uppercase"><a class="text-white" href="">Beranda</a></p>
                 <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                <p class="m-0 text-uppercase">Review File</p>
+                <p class="m-0 text-uppercase">Tinjau Gambar</p>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
 <div class="container-fluid py-5">
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h1>Check Image Length Wave</h1>
+            <h1>Cek Panjang Gelombang Cahaya</h1>
         </div>
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -44,7 +44,7 @@
                     <div id="success"></div>
                         <div class="control-group mb-4">
                             <select id="select2item" class="form-control select2 selek2" style="width: 100%;">
-                                <option value="" disabled selected>Select an option</option>
+                                <option value="" disabled selected>Pilih Gambar</option>
                             </select>
                         </div>
 
@@ -53,7 +53,7 @@
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <textarea class="form-control border-0 py-3 px-4" rows="5" id="keterangan" placeholder="Message" required="required" data-validation-required-message="Please enter Description"></textarea>
+                            <textarea class="form-control border-0 py-3 px-4" rows="5" id="keterangan" placeholder="Keterangan" required="required" data-validation-required-message="Please enter Description"></textarea>
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group" style="display: none;">
@@ -63,7 +63,7 @@
                             <img id="preview-img" src="https://static.vecteezy.com/system/resources/previews/004/968/473/non_2x/upload-or-add-a-picture-jpg-file-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg" alt="img" class="card-img">
                         </div>
                         <div class="text-center pt-5">
-                            <button class="btn btn-danger py-3 px-5" type="button" id="hapus_gambar">Delete Image</button>
+                            <button class="btn btn-danger py-3 px-5" type="button" id="hapus_gambar">Hapus Gambar</button>
                         </div>
                         <div class="control-group pt-5" id="table_warna">
                             <div class="control-group">
@@ -71,10 +71,10 @@
                                     <table id="spectrum_table" class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Color Preview</th>
-                                                <th>Color Code</th>
-                                                <th>Wave Length</th>
-                                                <th>Energy Photon</th>
+                                                <th>Warna</th>
+                                                <th>Kode Warna</th>
+                                                <th>Panjang Gelombang</th>
+                                                <th>Energi Foton</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -119,7 +119,7 @@
             if (id_gambar) {
                 alertSwalConfirm(
                     {
-                        title: 'Menghapus Gambar',
+                        title: 'Peringatan',
                         text: 'Anda Yakin Untuk Menghapus Gambar ?.',
                         icon: 'warning',
                     },
@@ -145,7 +145,7 @@
             var selectElement = $('#select2item');
             selectElement.empty(); // Clear any existing options
 
-            selectElement.append('<option value="" disabled selected>Select an option</option>');
+            selectElement.append('<option value="" disabled selected>Pilih Gambar</option>');
 
             response.forEach(function(item) {
                 // Create an option element and append it to the select element
@@ -172,13 +172,7 @@
             success: function(response) {
                 alertSwal({
                     title: 'Berhasil Menghapus',
-                    text: 'Gambar berhasil dihapus.',
-                    icon: 'success',
-                    showConfirmButton: true, // Show a "OK" button to close manually
-                });
-                alertSwal({
-                    title: 'Berhasil Menghapus',
-                    text: 'Gambar berhasil dihapus.',
+                    text: 'Gambar Berhasil Dihapus.',
                     icon: 'success',
                     showConfirmButton: true, // Show a "OK" button to close manually
                 }).then(() => {

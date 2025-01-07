@@ -131,6 +131,11 @@
                 window.location.href = targetUrl;
             }
         });
+
+        $('#header-carousel').carousel({
+            interval: 3000, // Set slide duration to 3 seconds
+            pause: 'hover',
+        });
     });
 </script>
 {% endblock %}

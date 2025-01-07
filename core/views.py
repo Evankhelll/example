@@ -176,7 +176,7 @@ def get_color_name(rgb_tuple):
 def rgb_to_wavelength(r, g, b):
     h, s, v = colorsys.rgb_to_hsv(r/255, g/255, b/255)
     wavelength = 380 + (h * 320)
-    return round(wavelength, 2)
+    return round(wavelength, 6)
 
 def wavelength_to_energy(wavelength_nm):
     """
@@ -200,7 +200,7 @@ def wavelength_to_energy(wavelength_nm):
     # Konversi ke eV
     energy_ev = energy_j / e
     
-    return round(energy_ev, 2)
+    return round(energy_ev, 6)
 
 def get_colors_as_json2(request, id):
     gambar_instance = gambar.objects.get(id=id)
@@ -217,7 +217,7 @@ def get_colors_as_json2(request, id):
     pixels = img_array.reshape(-1, 3)
     
     # Use KMeans to detect dominant colors
-    kmeans = KMeans(n_clusters=100, random_state=42)  # Detect 10 dominant colors
+    kmeans = KMeans(n_clusters=200, random_state=42)  # Detect 100 dominant colors
     kmeans.fit(pixels)
     
     # Get dominant colors and their percentages
@@ -225,29 +225,30 @@ def get_colors_as_json2(request, id):
     labels = kmeans.labels_
     total_pixels = len(labels)
     
-    # Track seen hex codes
-    seen_hex_codes = set()
+    # Track unique combinations
+    seen_combinations = set()
     colors_data = []
     
     for i, color in enumerate(colors):
         percentage = (np.sum(labels == i) / total_pixels) * 100
         
         # Convert color to integer RGB values
-        rgb = tuple(int(x) for x in color)
+        rgb = tuple(int(round(x)) for x in color)
         hex_code = '#{:02x}{:02x}{:02x}'.format(*rgb)
         
-        # Skip if the hex code is already seen
-        if hex_code in seen_hex_codes:
-            continue
-        
-        # Add the hex code to the seen set
-        seen_hex_codes.add(hex_code)
-
         # Calculate wavelength
-        wavelength = rgb_to_wavelength(*rgb)
+        wavelength = round(rgb_to_wavelength(*rgb), 2)
         
         # Calculate energy
-        energy = wavelength_to_energy(wavelength)
+        energy = round(wavelength_to_energy(wavelength), 2)
+        
+        # Skip if the combination of hex_code, wavelength, and energy is already seen
+        combination = (wavelength, energy)
+        if combination in seen_combinations:
+            continue
+        
+        # Add the combination to the seen set
+        seen_combinations.add(combination)
         
         # Build the color data
         color_info = {
