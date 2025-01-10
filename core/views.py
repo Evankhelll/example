@@ -1,5 +1,4 @@
 import json
-import webcolors
 from PIL import Image
 import numpy as np
 from django.http import JsonResponse
@@ -11,7 +10,6 @@ from PIL import Image
 from sklearn.cluster import KMeans
 import colorsys
 from scipy.spatial import KDTree
-from webcolors import hex_to_rgb
 
 
 # Predefined set of web color names with their RGB values
