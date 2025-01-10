@@ -91,8 +91,10 @@ DATABASES = {
         "NAME": "db_sample",
         "USER": "postgres",
         "PASSWORD": "password",
-        "HOST": "localhost",
-        "PORT": "5432",
+        # "HOST": "localhost",
+        # "PORT": "5432",
+        "HOST": "aws-0-ap-southeast-1.pooler.supabase.com",
+        "PORT": "6543",
     },
 }
 
