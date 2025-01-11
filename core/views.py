@@ -1,5 +1,6 @@
 import json
 import numpy as np
+from PIL import Image
 from django.http import JsonResponse
 from django.conf import settings
 import os
